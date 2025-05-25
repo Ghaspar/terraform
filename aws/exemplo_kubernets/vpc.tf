@@ -21,6 +21,8 @@ resource "aws_subnet" "subnets" {
     vpc_id = aws_vpc.vpc-k8s.id
     cidr_block = cidrsubnet(aws_vpc.vpc-k8s.cidr_block, 8, count.index)
 
+    map_public_ip_on_launch = true
+
     tags = {
         Name = "${var.prefix} subnet for ${element(data.aws_availability_zones.available.names, count.index)}"
     }
