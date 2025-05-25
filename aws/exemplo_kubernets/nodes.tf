@@ -55,6 +55,7 @@ resource "aws_eks_node_group" "node-1" {
     }
   
   depends_on = [ 
+    aws_eks_cluster.cluster-teste-terraform,
     aws_iam_role_policy_attachment.node-AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.node-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.node-AmazonEC2ContainerRegistryReadOnly,
