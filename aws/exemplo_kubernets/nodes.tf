@@ -12,8 +12,6 @@ data "aws_iam_policy_document" "ec2-node-k8s-policy" {
 
     actions = [
         "sts:AssumeRole",
-        "sts:TagSession",
-        "sts:SetSourceIdentity"
     ]
   }
 }
