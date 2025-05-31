@@ -39,6 +39,19 @@ resource "aws_vpc_security_group_egress_rule" "sge_k8s_ipv4" {
 # -----
 
 
+# Attach AmazonEKSClusterPolicy à Role do cluster
+resource "aws_iam_role_policy_attachment" "attach-cluster-policy" {
+  role       = aws_iam_role.role-k8s.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+}
+
+# Attach AmazonEKSVPCResourceController à Role do cluster
+resource "aws_iam_role_policy_attachment" "attach-vpc-controller-policy" {
+  role       = aws_iam_role.role-k8s.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+}
+
+
 # Roles do EKS
 # Um pouco confuso, mas para uma role criada, você precisa criar um policy document e essa role deve assumir essa policy, depois vc faz o mesmo para a policy, criar uma policy, assume ela no policy document dela e depois no final vc vai atachar a role name com o policy document criado do policy.
 
@@ -138,7 +151,9 @@ resource "aws_eks_cluster" "cluster-teste-terraform" {
   # properly delete EKS managed EC2 infrastructure such as Security Groups.
   depends_on = [
     aws_cloudwatch_log_group.log-k8s,
-    aws_iam_role_policy_attachment.attach-role-policy-k8s
+    aws_iam_role_policy_attachment.attach-role-policy-k8s,
+    aws_iam_role_policy_attachment.attach-cluster-policy,
+    aws_iam_role_policy_attachment.attach-vpc-controller-policy,
   ]
 }
 
